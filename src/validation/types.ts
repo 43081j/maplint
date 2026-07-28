@@ -51,12 +51,18 @@ export const SourceMapFileSchema = v.object({
 
 export type SourceMapFile = v.InferOutput<typeof SourceMapFileSchema>;
 
+export const SEVERITY_WARN = 1;
+export const SEVERITY_ERROR = 2;
+
+export type Severity = typeof SEVERITY_WARN | typeof SEVERITY_ERROR;
+
 /**
  * A problem discovered in a source map by a validator.
  */
-export interface ValidationError {
+export interface ValidationMessage {
   filePath?: string;
   message: string;
+  severity: Severity;
 }
 
 /**
@@ -64,4 +70,4 @@ export interface ValidationError {
  */
 export type Validator = (
   file: SourceMapFile,
-) => ValidationError[] | Promise<ValidationError[]>;
+) => ValidationMessage[] | Promise<ValidationMessage[]>;

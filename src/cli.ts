@@ -7,7 +7,8 @@ import { parseArgs } from 'node:util';
 import { lint } from './index.js';
 import type { LintResult } from './index.js';
 import { downloadPackage } from './npm.js';
-import type { ValidationError } from './validation/types.js';
+import { SEVERITY_ERROR, SEVERITY_WARN } from './validation/types.js';
+import type { ValidationMessage } from './validation/types.js';
 
 const usage = `Usage: maplint [options] <path>
 
@@ -24,18 +25,22 @@ Options:
  */
 function convertPathsToRelative(result: LintResult, base: string): LintResult {
   return {
-    errors: result.errors.map((error) =>
-      error.filePath === undefined
-        ? error
+    messages: result.messages.map((message) =>
+      message.filePath === undefined
+        ? message
         : {
-            filePath: path.relative(base, error.filePath),
-            message: error.message,
+            ...message,
+            filePath: path.relative(base, message.filePath),
           },
     ),
     sourceMaps: result.sourceMaps.map((sourceMap) =>
       path.relative(base, sourceMap),
     ),
   };
+}
+
+function formatSeverity(message: ValidationMessage): string {
+  return (message.severity === SEVERITY_ERROR ? 'error' : 'warning').padEnd(7);
 }
 
 async function runCLI(): Promise<void> {
@@ -78,47 +83,62 @@ async function runCLI(): Promise<void> {
     result = await lint(target);
   }
 
-  const globalErrors: ValidationError[] = [];
-  const errorsByFile = new Map<string, ValidationError[]>();
+  const globalMessages: ValidationMessage[] = [];
+  const messagesByFile = new Map<string, ValidationMessage[]>();
 
-  for (const error of result.errors) {
-    if (error.filePath === undefined) {
-      globalErrors.push(error);
+  for (const message of result.messages) {
+    if (message.filePath === undefined) {
+      globalMessages.push(message);
       continue;
     }
 
-    const errors = errorsByFile.get(error.filePath);
+    const messages = messagesByFile.get(message.filePath);
 
-    if (errors === undefined) {
-      errorsByFile.set(error.filePath, [error]);
+    if (messages === undefined) {
+      messagesByFile.set(message.filePath, [message]);
     } else {
-      errors.push(error);
+      messages.push(message);
     }
   }
 
-  for (const error of globalErrors) {
-    console.error(`error  ${error.message}`);
+  for (const message of globalMessages) {
+    console.error(`${formatSeverity(message)}  ${message.message}`);
   }
 
-  for (const [filePath, errors] of errorsByFile) {
+  for (const [filePath, messages] of messagesByFile) {
     console.error(`\n${filePath}`);
 
-    for (const error of errors) {
-      console.error(`  error  ${error.message}`);
+    for (const message of messages) {
+      console.error(`  ${formatSeverity(message)}  ${message.message}`);
     }
   }
 
-  if (result.errors.length > 0) {
+  const errorCount = result.messages.filter(
+    (message) => message.severity === SEVERITY_ERROR,
+  ).length;
+  const warningCount = result.messages.filter(
+    (message) => message.severity === SEVERITY_WARN,
+  ).length;
+
+  if (result.messages.length > 0) {
+    const counts = [
+      ...(errorCount > 0 ? [`${errorCount} error(s)`] : []),
+      ...(warningCount > 0 ? [`${warningCount} warning(s)`] : []),
+    ];
+
     console.error(
-      `\nFound ${result.errors.length} error(s) in ${result.sourceMaps.length} source map(s).`,
+      `\nFound ${counts.join(' and ')} in ${result.sourceMaps.length} source map(s).`,
     );
-    process.exitCode = 1;
   } else if (result.sourceMaps.length === 0) {
     console.log('No source maps found.');
   } else {
     console.log(
-      `No errors found in ${result.sourceMaps.length} source map(s).`,
+      `No problems found in ${result.sourceMaps.length} source map(s).`,
     );
+  }
+
+  if (errorCount > 0) {
+    process.exitCode = 1;
   }
 }
 

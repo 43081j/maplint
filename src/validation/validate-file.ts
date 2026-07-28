@@ -3,8 +3,8 @@ import * as v from 'valibot';
 import { ignoreListValidator } from './ignore-list.js';
 import { mappingsValidator } from './mappings.js';
 import { sourceFilesValidator } from './source-files.js';
-import { SourceMapFileSchema } from './types.js';
-import type { SourceMapFile, ValidationError, Validator } from './types.js';
+import { SEVERITY_ERROR, SourceMapFileSchema } from './types.js';
+import type { SourceMapFile, ValidationMessage, Validator } from './types.js';
 
 const validators: Validator[] = [
   ignoreListValidator,
@@ -17,7 +17,7 @@ const validators: Validator[] = [
  */
 export async function validateFile(
   filePath: string,
-): Promise<ValidationError[]> {
+): Promise<ValidationMessage[]> {
   let contents: unknown;
 
   try {
@@ -26,6 +26,7 @@ export async function validateFile(
     return [
       {
         filePath,
+        severity: SEVERITY_ERROR,
         message: `Failed to read source map: ${(err as Error).message}`,
       },
     ];
@@ -39,6 +40,7 @@ export async function validateFile(
   if (!result.success) {
     return result.issues.map((issue) => ({
       filePath,
+      severity: SEVERITY_ERROR,
       message: `${v.getDotPath(issue) ?? '<root>'}: ${issue.message}`,
     }));
   }

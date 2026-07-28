@@ -17,7 +17,7 @@ async function lintFixture(name: string): Promise<LintResult> {
 
   return {
     sourceMaps: [...result.sourceMaps].sort(),
-    errors: [...result.errors].sort((a, b) =>
+    messages: [...result.messages].sort((a, b) =>
       `${a.filePath}${a.message}`.localeCompare(`${b.filePath}${b.message}`),
     ),
   };

@@ -1,7 +1,8 @@
 import { access } from 'node:fs/promises';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { ValidationError, Validator } from './types.js';
+import { SEVERITY_WARN } from './types.js';
+import type { ValidationMessage, Validator } from './types.js';
 
 const schemePattern = /^[a-z][a-z0-9+.-]+:/i;
 
@@ -32,8 +33,8 @@ function resolveSourcePath(
 export const sourceFilesValidator: Validator = async (file) => {
   const { sources, sourcesContent, sourceRoot = '' } = file.map;
 
-  const errors = await Promise.all(
-    sources.map(async (source, i): Promise<ValidationError | null> => {
+  const warnings = await Promise.all(
+    sources.map(async (source, i): Promise<ValidationMessage | null> => {
       // A null source has no path to resolve, and a source with inline
       // contents doesn't need one.
       if (source === null || sourcesContent?.[i] != null) {
@@ -54,11 +55,12 @@ export const sourceFilesValidator: Validator = async (file) => {
       } catch {
         return {
           filePath: file.path,
+          severity: SEVERITY_WARN,
           message: `"sources[${i}]" contained the path "${source}" which could not be found`,
         };
       }
     }),
   );
 
-  return errors.filter((error) => error !== null);
+  return warnings.filter((warning) => warning !== null);
 };
