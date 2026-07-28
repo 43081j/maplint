@@ -45,9 +45,9 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@types/node": "^25.6.2",
+    "@types/node": "^26.1.2",
     "@vitest/coverage-v8": "^4.1.5",
-    "oxfmt": "^0.48.0",
+    "oxfmt": "^0.61.0",
     "oxlint": "^1.63.0",
     "publint": "^0.3.22",
     "tsdown": "^0.22.14",
