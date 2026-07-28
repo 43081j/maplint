@@ -3,8 +3,12 @@
   "version": "0.0.0-dev",
   "description": "A tiny linter for validating source maps.",
   "type": "module",
+  "bin": {
+    "maplint": "./lib/cli.mjs"
+  },
   "exports": {
-    ".": "./lib/main.mjs",
+    ".": "./lib/index.mjs",
+    "./cli.js": "./lib/cli.mjs",
     "./package.json": "./package.json"
   },
   "files": [

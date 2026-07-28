@@ -1,10 +1,15 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/main.ts'],
+  entry: ['src/index.ts', 'src/cli.ts'],
   outDir: 'lib',
   clean: true,
-  exports: true,
+  exports: {
+    enabled: true,
+    extensions: true,
+    bin: 'src/cli.ts',
+    inlinedDependencies: false
+  },
   dts: true,
   publint: true,
   attw: {
