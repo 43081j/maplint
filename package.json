@@ -56,6 +56,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@jridgewell/sourcemap-codec": "^1.5.5"
+    "@jridgewell/sourcemap-codec": "^1.5.5",
+    "modern-tar": "^0.8.0"
   }
 }

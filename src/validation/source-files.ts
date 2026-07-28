@@ -54,7 +54,7 @@ export const sourceFilesValidator: Validator = async (file) => {
       } catch {
         return {
           filePath: file.path,
-          message: `"sources[${i}]" contained the path "${sourcePath}" which could not be found`,
+          message: `"sources[${i}]" contained the path "${source}" which could not be found`,
         };
       }
     }),

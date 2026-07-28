@@ -63,7 +63,7 @@ exports[`lint > map with an unresolved source path 1`] = `
   "errors": [
     {
       "filePath": "test/fixtures/unresolved-source/dist/greeter.js.map",
-      "message": ""sources[0]" contained the path "test/fixtures/unresolved-source/src/greeter.ts" which could not be found",
+      "message": ""sources[0]" contained the path "../src/greeter.ts" which could not be found",
     },
   ],
   "sourceMaps": [
