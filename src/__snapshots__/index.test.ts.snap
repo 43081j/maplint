@@ -1,0 +1,143 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lint > map which does not match the source map schema 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.mappings: "mappings" must be a VLQ (variable length quantity) encoded string of mappings",
+    },
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.sources.0: Each source must be a path or null",
+    },
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.version: Source map version must be 3",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/invalid-shape/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map which is not valid JSON 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/malformed-json/greeter.js.map",
+      "message": "Failed to read source map: Unexpected end of JSON input",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/malformed-json/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map with an invalid ignore list 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
+      "message": ""ignoreList[1]" is 4, which is not an index into "sources"",
+    },
+    {
+      "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
+      "message": ""ignoreList[2]" must be an integer, but is 1.5",
+    },
+    {
+      "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
+      "message": ""ignoreList[3]" is -1, which is not an index into "sources"",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/invalid-ignore-list/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map with an unresolved source path 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/unresolved-source/dist/greeter.js.map",
+      "message": ""sources[0]" contained the path "test/fixtures/unresolved-source/src/greeter.ts" which could not be found",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/unresolved-source/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map with mappings referencing sources and names which do not exist 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/out-of-range-mappings/greeter.js.map",
+      "message": ""mappings" has a segment at line 1, column 0 referencing "names[2]", which does not exist",
+    },
+    {
+      "filePath": "test/fixtures/out-of-range-mappings/greeter.js.map",
+      "message": ""mappings" has a segment at line 1, column 0 referencing "sources[3]", which does not exist",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/out-of-range-mappings/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map with mappings which are not base64 VLQ 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/invalid-mappings/greeter.js.map",
+      "message": ""mappings" contains " " at offset 5, which is not valid base64 VLQ",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/invalid-mappings/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > path which does not exist 1`] = `
+{
+  "errors": [
+    {
+      "message": "Failed to read "test/fixtures/does-not-exist": ENOENT: no such file or directory, stat 'test/fixtures/does-not-exist'",
+    },
+  ],
+  "sourceMaps": [],
+}
+`;
+
+exports[`lint > single source map file 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-external-sources/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > valid map with external sources 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-external-sources/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > valid map with inline sources 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-inline-sources/dist/greeter.js.map",
+  ],
+}
+`;
