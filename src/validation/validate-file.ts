@@ -1,12 +1,23 @@
 import { readFile } from 'node:fs/promises';
 import * as v from 'valibot';
-import { SourceMapFileSchema, validators } from './validators.js';
-import type { SourceMapFile, ValidationError } from './validators.js';
+import { ignoreListValidator } from './ignore-list.js';
+import { mappingsValidator } from './mappings.js';
+import { sourceFilesValidator } from './source-files.js';
+import { SourceMapFileSchema } from './types.js';
+import type { SourceMapFile, ValidationError, Validator } from './types.js';
+
+const validators: Validator[] = [
+  ignoreListValidator,
+  mappingsValidator,
+  sourceFilesValidator,
+];
 
 /**
  * Loads and validates a single source map.
  */
-export async function validateFile(filePath: string): Promise<ValidationError[]> {
+export async function validateFile(
+  filePath: string,
+): Promise<ValidationError[]> {
   let contents: unknown;
 
   try {
@@ -34,5 +45,9 @@ export async function validateFile(filePath: string): Promise<ValidationError[]>
 
   const file: SourceMapFile = result.output;
 
-  return validators.flatMap((validator) => validator(file));
+  const results = await Promise.all(
+    validators.map((validator) => validator(file)),
+  );
+
+  return results.flat();
 }

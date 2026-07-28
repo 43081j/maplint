@@ -1,7 +1,7 @@
 import { glob, stat } from 'node:fs/promises';
 import * as path from 'node:path';
-import type { ValidationError } from './validators.js';
-import { validateFile } from './validate.js';
+import type { ValidationError } from './validation/types.js';
+import { validateFile } from './validation/validate-file.js';
 
 const DEFAULT_IGNORES = new Set(['node_modules']);
 

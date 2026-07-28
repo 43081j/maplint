@@ -62,6 +62,6 @@ export interface ValidationError {
 /**
  * Validates a single source map, returning any problems found with it.
  */
-export type Validator = (file: SourceMapFile) => ValidationError[];
-
-export const validators: Validator[] = [];
+export type Validator = (
+  file: SourceMapFile,
+) => ValidationError[] | Promise<ValidationError[]>;

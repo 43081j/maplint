@@ -1,0 +1,1 @@
+{"version":3,"file":"greeter.js","sources":["../src/greeter.ts"],"sourcesContent":["export const greet = () => {};\n"],"names":[],"mappings":"hello world"}

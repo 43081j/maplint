@@ -2,7 +2,7 @@
 
 import { parseArgs } from 'node:util';
 import { lint } from './index.js';
-import type { ValidationError } from './validators.js';
+import type { ValidationError } from './validation/types.js';
 
 const usage = `Usage: maplint <path>
 

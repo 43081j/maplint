@@ -40,6 +40,18 @@ describe('lint', () => {
     expect(await lintFixture('invalid-shape')).toMatchSnapshot();
   });
 
+  test('map with mappings which are not base64 VLQ', async () => {
+    expect(await lintFixture('invalid-mappings')).toMatchSnapshot();
+  });
+
+  test('map with mappings referencing sources and names which do not exist', async () => {
+    expect(await lintFixture('out-of-range-mappings')).toMatchSnapshot();
+  });
+
+  test('map with an invalid ignore list', async () => {
+    expect(await lintFixture('invalid-ignore-list')).toMatchSnapshot();
+  });
+
   test('map which is not valid JSON', async () => {
     expect(await lintFixture('malformed-json')).toMatchSnapshot();
   });

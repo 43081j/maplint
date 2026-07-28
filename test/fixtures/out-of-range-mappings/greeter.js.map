@@ -1,0 +1,1 @@
+{"version":3,"file":"greeter.js","sources":["../src/greeter.ts"],"sourcesContent":["export const greet = () => {};\n"],"names":["greet"],"mappings":"AGAAE;UHCA,NAAA"}
