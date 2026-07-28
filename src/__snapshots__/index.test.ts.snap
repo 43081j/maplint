@@ -1,0 +1,84 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lint > map which does not match the source map schema 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.mappings: "mappings" must be a VLQ (variable length quantity) encoded string of mappings",
+    },
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.sources.0: Each source must be a path or null",
+    },
+    {
+      "filePath": "test/fixtures/invalid-shape/greeter.js.map",
+      "message": "map.version: Source map version must be 3",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/invalid-shape/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map which is not valid JSON 1`] = `
+{
+  "errors": [
+    {
+      "filePath": "test/fixtures/malformed-json/greeter.js.map",
+      "message": "Failed to read source map: Unexpected end of JSON input",
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/malformed-json/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > map with an unresolved source path 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/unresolved-source/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > path which does not exist 1`] = `
+{
+  "errors": [
+    {
+      "message": "Failed to read "test/fixtures/does-not-exist": ENOENT: no such file or directory, stat 'test/fixtures/does-not-exist'",
+    },
+  ],
+  "sourceMaps": [],
+}
+`;
+
+exports[`lint > single source map file 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-external-sources/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > valid map with external sources 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-external-sources/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > valid map with inline sources 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [
+    "test/fixtures/valid-inline-sources/dist/greeter.js.map",
+  ],
+}
+`;

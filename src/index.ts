@@ -1,8 +1,7 @@
-import { glob, readFile, stat } from 'node:fs/promises';
+import { glob, stat } from 'node:fs/promises';
 import * as path from 'node:path';
-import * as v from 'valibot';
-import { SourceMapFileSchema, validators } from './validators.js';
-import type { SourceMapFile, ValidationError } from './validators.js';
+import type { ValidationError } from './validators.js';
+import { validateFile } from './validate.js';
 
 const DEFAULT_IGNORES = new Set(['node_modules']);
 
@@ -29,40 +28,6 @@ async function findSourceMaps(target: string): Promise<string[]> {
   }
 
   return results;
-}
-
-/**
- * Loads and validates a single source map.
- */
-async function validateFile(filePath: string): Promise<ValidationError[]> {
-  let contents: unknown;
-
-  try {
-    contents = JSON.parse(await readFile(filePath, 'utf8'));
-  } catch (err) {
-    return [
-      {
-        filePath,
-        message: `Failed to read source map: ${(err as Error).message}`,
-      },
-    ];
-  }
-
-  const result = v.safeParse(SourceMapFileSchema, {
-    path: filePath,
-    map: contents,
-  });
-
-  if (!result.success) {
-    return result.issues.map((issue) => ({
-      filePath,
-      message: `${v.getDotPath(issue) ?? '<root>'}: ${issue.message}`,
-    }));
-  }
-
-  const file: SourceMapFile = result.output;
-
-  return validators.flatMap((validator) => validator(file));
 }
 
 export interface LintResult {

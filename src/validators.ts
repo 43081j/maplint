@@ -3,16 +3,41 @@ import * as v from 'valibot';
 /**
  * A source map, as described by the source map v3 specification.
  */
-export const SourceMapSchema = v.object({
-  version: v.literal(3),
-  file: v.optional(v.string()),
-  sourceRoot: v.optional(v.string()),
-  sources: v.array(v.nullable(v.string())),
-  sourcesContent: v.optional(v.array(v.nullable(v.string()))),
-  names: v.optional(v.array(v.string())),
-  mappings: v.string(),
-  ignoreList: v.optional(v.array(v.number())),
-});
+export const SourceMapSchema = v.object(
+  {
+    version: v.literal(3, 'Source map version must be 3'),
+    file: v.optional(v.string('"file" must be the path of the generated file')),
+    sourceRoot: v.optional(
+      v.string('"sourceRoot" must be a path prepended to each source'),
+    ),
+    sources: v.array(
+      v.nullable(v.string('Each source must be a path or null')),
+      '"sources" must be an array of source paths',
+    ),
+    sourcesContent: v.optional(
+      v.array(
+        v.nullable(v.string('Each source content must be a string or null')),
+        '"sourcesContent" must be an array of source contents',
+      ),
+    ),
+    names: v.optional(
+      v.array(
+        v.string('Each name must be a string'),
+        '"names" must be an array of names',
+      ),
+    ),
+    mappings: v.string(
+      '"mappings" must be a VLQ (variable length quantity) encoded string of mappings',
+    ),
+    ignoreList: v.optional(
+      v.array(
+        v.number('Each ignored source must be an index into "sources"'),
+        '"ignoreList" must be an array of source indices',
+      ),
+    ),
+  },
+  'Source map must be an object',
+);
 
 export type SourceMap = v.InferOutput<typeof SourceMapSchema>;
 
