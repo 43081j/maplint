@@ -1,22 +1,49 @@
 #!/usr/bin/env node
 
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import * as path from 'node:path';
 import { parseArgs } from 'node:util';
 import { lint } from './index.js';
+import type { LintResult } from './index.js';
+import { downloadPackage } from './npm.js';
 import type { ValidationError } from './validation/types.js';
 
-const usage = `Usage: maplint <path>
+const usage = `Usage: maplint [options] <path>
 
 Validates the source maps found in <path>, which may be a directory to
 search or a single source map file.
 
 Options:
+      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+              validating the source maps published in its tarball
   -h, --help  Display this message`;
+
+/**
+ * Rewrites the source map paths in a result to be relative to `base`.
+ */
+function convertPathsToRelative(result: LintResult, base: string): LintResult {
+  return {
+    errors: result.errors.map((error) =>
+      error.filePath === undefined
+        ? error
+        : {
+            filePath: path.relative(base, error.filePath),
+            message: error.message,
+          },
+    ),
+    sourceMaps: result.sourceMaps.map((sourceMap) =>
+      path.relative(base, sourceMap),
+    ),
+  };
+}
 
 async function runCLI(): Promise<void> {
   const { positionals, values } = parseArgs({
     allowPositionals: true,
     options: {
       help: { type: 'boolean', short: 'h' },
+      npm: { type: 'boolean' },
     },
   });
 
@@ -33,7 +60,23 @@ async function runCLI(): Promise<void> {
     return;
   }
 
-  const result = await lint(target);
+  let result: LintResult;
+
+  if (values.npm) {
+    const dest = await mkdtemp(path.join(tmpdir(), 'maplint-'));
+
+    try {
+      const id = await downloadPackage(target, dest);
+
+      console.log(`Validating source maps in ${id}`);
+
+      result = convertPathsToRelative(await lint(dest), dest);
+    } finally {
+      await rm(dest, { force: true, recursive: true });
+    }
+  } else {
+    result = await lint(target);
+  }
 
   const globalErrors: ValidationError[] = [];
   const errorsByFile = new Map<string, ValidationError[]>();
@@ -73,7 +116,7 @@ async function runCLI(): Promise<void> {
   }
 }
 
-runCLI().catch((err) => {
-  console.error(err);
+runCLI().catch((err: unknown) => {
+  console.error(`error  ${err instanceof Error ? err.message : err}`);
   process.exitCode = 1;
 });
