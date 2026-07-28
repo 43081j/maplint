@@ -19,9 +19,9 @@
   "scripts": {
     "build": "tsdown",
     "lint:js": "oxlint src",
-    "lint:format": "oxfmt --check src",
+    "lint:format": "oxfmt --check src README.md",
     "lint": "npm run lint:js && npm run lint:format",
-    "format": "oxfmt --write src",
+    "format": "oxfmt --write src README.md",
     "test": "npm run build && vitest run"
   },
   "keywords": [
