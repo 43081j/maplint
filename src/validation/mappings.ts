@@ -1,5 +1,6 @@
 import { decode } from '@jridgewell/sourcemap-codec';
-import type { ValidationError, Validator } from './types.js';
+import { SEVERITY_ERROR } from './types.js';
+import type { ValidationMessage, Validator } from './types.js';
 
 const invalidCharacter = /[^A-Za-z0-9+/,;]/;
 
@@ -18,6 +19,7 @@ export const mappingsValidator: Validator = (file) => {
     return [
       {
         filePath: file.path,
+        severity: SEVERITY_ERROR,
         message:
           `"mappings" contains "${invalidMatch[0]}" at offset ` +
           `${invalidMatch.index}, which is not valid base64 VLQ`,
@@ -25,7 +27,7 @@ export const mappingsValidator: Validator = (file) => {
     ];
   }
 
-  const errors: ValidationError[] = [];
+  const errors: ValidationMessage[] = [];
 
   for (const [line, segments] of decode(mappings).entries()) {
     for (const segment of segments) {
@@ -37,6 +39,7 @@ export const mappingsValidator: Validator = (file) => {
       if (generatedColumn < 0) {
         errors.push({
           filePath: file.path,
+          severity: SEVERITY_ERROR,
           message: `"mappings" has a segment on line ${line + 1} with a negative generated column (${generatedColumn})`,
         });
       }
@@ -47,6 +50,7 @@ export const mappingsValidator: Validator = (file) => {
         if (sourceIndex < 0 || sourceIndex >= sources.length) {
           errors.push({
             filePath: file.path,
+            severity: SEVERITY_ERROR,
             message: `"mappings" has a segment at ${at} referencing "sources[${sourceIndex}]", which does not exist`,
           });
         }
@@ -54,6 +58,7 @@ export const mappingsValidator: Validator = (file) => {
         if (originalLine < 0 || originalColumn < 0) {
           errors.push({
             filePath: file.path,
+            severity: SEVERITY_ERROR,
             message: `"mappings" has a segment at ${at} pointing at a negative position in its source (${originalLine}:${originalColumn})`,
           });
         }
@@ -65,6 +70,7 @@ export const mappingsValidator: Validator = (file) => {
         if (nameIndex < 0 || nameIndex >= names.length) {
           errors.push({
             filePath: file.path,
+            severity: SEVERITY_ERROR,
             message: `"mappings" has a segment at ${at} referencing "names[${nameIndex}]", which does not exist`,
           });
         }

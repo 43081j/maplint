@@ -2,25 +2,28 @@
 
 exports[`lint > directory containing no source maps 1`] = `
 {
-  "errors": [],
+  "messages": [],
   "sourceMaps": [],
 }
 `;
 
 exports[`lint > map which does not match the source map schema 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/invalid-shape/greeter.js.map",
       "message": "map.mappings: "mappings" must be a VLQ (variable length quantity) encoded string of mappings",
+      "severity": 2,
     },
     {
       "filePath": "test/fixtures/invalid-shape/greeter.js.map",
       "message": "map.sources.0: Each source must be a path or null",
+      "severity": 2,
     },
     {
       "filePath": "test/fixtures/invalid-shape/greeter.js.map",
       "message": "map.version: Source map version must be 3",
+      "severity": 2,
     },
   ],
   "sourceMaps": [
@@ -31,10 +34,11 @@ exports[`lint > map which does not match the source map schema 1`] = `
 
 exports[`lint > map which is not valid JSON 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/malformed-json/greeter.js.map",
       "message": "Failed to read source map: Unexpected end of JSON input",
+      "severity": 2,
     },
   ],
   "sourceMaps": [
@@ -45,18 +49,21 @@ exports[`lint > map which is not valid JSON 1`] = `
 
 exports[`lint > map with an invalid ignore list 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
       "message": ""ignoreList[1]" is 4, which is not an index into "sources"",
+      "severity": 2,
     },
     {
       "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
       "message": ""ignoreList[2]" must be an integer, but is 1.5",
+      "severity": 2,
     },
     {
       "filePath": "test/fixtures/invalid-ignore-list/greeter.js.map",
       "message": ""ignoreList[3]" is -1, which is not an index into "sources"",
+      "severity": 2,
     },
   ],
   "sourceMaps": [
@@ -67,10 +74,11 @@ exports[`lint > map with an invalid ignore list 1`] = `
 
 exports[`lint > map with an unresolved source path 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/unresolved-source/dist/greeter.js.map",
       "message": ""sources[0]" contained the path "../src/greeter.ts" which could not be found",
+      "severity": 1,
     },
   ],
   "sourceMaps": [
@@ -81,14 +89,16 @@ exports[`lint > map with an unresolved source path 1`] = `
 
 exports[`lint > map with mappings referencing sources and names which do not exist 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/out-of-range-mappings/greeter.js.map",
       "message": ""mappings" has a segment at line 1, column 0 referencing "names[2]", which does not exist",
+      "severity": 2,
     },
     {
       "filePath": "test/fixtures/out-of-range-mappings/greeter.js.map",
       "message": ""mappings" has a segment at line 1, column 0 referencing "sources[3]", which does not exist",
+      "severity": 2,
     },
   ],
   "sourceMaps": [
@@ -99,10 +109,11 @@ exports[`lint > map with mappings referencing sources and names which do not exi
 
 exports[`lint > map with mappings which are not base64 VLQ 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "filePath": "test/fixtures/invalid-mappings/greeter.js.map",
       "message": ""mappings" contains " " at offset 5, which is not valid base64 VLQ",
+      "severity": 2,
     },
   ],
   "sourceMaps": [
@@ -113,9 +124,10 @@ exports[`lint > map with mappings which are not base64 VLQ 1`] = `
 
 exports[`lint > path which does not exist 1`] = `
 {
-  "errors": [
+  "messages": [
     {
       "message": "Failed to read "test/fixtures/does-not-exist": ENOENT: no such file or directory, stat 'test/fixtures/does-not-exist'",
+      "severity": 2,
     },
   ],
   "sourceMaps": [],
@@ -124,7 +136,7 @@ exports[`lint > path which does not exist 1`] = `
 
 exports[`lint > single source map file 1`] = `
 {
-  "errors": [],
+  "messages": [],
   "sourceMaps": [
     "test/fixtures/valid-external-sources/dist/greeter.js.map",
   ],
@@ -133,7 +145,7 @@ exports[`lint > single source map file 1`] = `
 
 exports[`lint > valid map with external sources 1`] = `
 {
-  "errors": [],
+  "messages": [],
   "sourceMaps": [
     "test/fixtures/valid-external-sources/dist/greeter.js.map",
   ],
@@ -142,7 +154,7 @@ exports[`lint > valid map with external sources 1`] = `
 
 exports[`lint > valid map with inline sources 1`] = `
 {
-  "errors": [],
+  "messages": [],
   "sourceMaps": [
     "test/fixtures/valid-inline-sources/dist/greeter.js.map",
   ],

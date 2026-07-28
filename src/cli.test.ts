@@ -21,7 +21,7 @@ const fixturesDir = path.join(rootDir, 'test', 'fixtures');
  * each version to the fixture directory published as it.
  */
 const packages: Record<string, Record<string, string>> = {
-  'broken-pkg': { '1.0.0': 'unresolved-source' },
+  'warning-pkg': { '1.0.0': 'unresolved-source' },
   'valid-pkg': {
     '1.0.0': 'valid-inline-sources',
     '2.0.0': 'valid-external-sources',
@@ -215,8 +215,8 @@ describe('cli', () => {
     expect(await runCLI('--npm', 'valid-pkg@1')).toMatchSnapshot();
   });
 
-  test('--npm with a package containing an invalid source map', async () => {
-    expect(await runCLI('--npm', 'broken-pkg')).toMatchSnapshot();
+  test('--npm with a package containing a source map with warnings', async () => {
+    expect(await runCLI('--npm', 'warning-pkg')).toMatchSnapshot();
   });
 
   test('--npm with an invalid package spec', async () => {

@@ -1,4 +1,5 @@
-import type { ValidationError, Validator } from './types.js';
+import { SEVERITY_ERROR } from './types.js';
+import type { ValidationMessage, Validator } from './types.js';
 
 /**
  * Validates that every entry of "ignoreList" is an integer which indexes into
@@ -11,12 +12,13 @@ export const ignoreListValidator: Validator = (file) => {
     return [];
   }
 
-  const errors: ValidationError[] = [];
+  const errors: ValidationMessage[] = [];
 
   for (const [i, entry] of ignoreList.entries()) {
     if (!Number.isInteger(entry)) {
       errors.push({
         filePath: file.path,
+        severity: SEVERITY_ERROR,
         message: `"ignoreList[${i}]" must be an integer, but is ${entry}`,
       });
       continue;
@@ -25,6 +27,7 @@ export const ignoreListValidator: Validator = (file) => {
     if (entry < 0 || entry >= sources.length) {
       errors.push({
         filePath: file.path,
+        severity: SEVERITY_ERROR,
         message: `"ignoreList[${i}]" is ${entry}, which is not an index into "sources"`,
       });
     }

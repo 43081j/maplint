@@ -1,6 +1,7 @@
 import { glob, stat } from 'node:fs/promises';
 import * as path from 'node:path';
-import type { ValidationError } from './validation/types.js';
+import { SEVERITY_ERROR } from './validation/types.js';
+import type { ValidationMessage } from './validation/types.js';
 import { validateFile } from './validation/validate-file.js';
 
 const DEFAULT_IGNORES = new Set(['node_modules']);
@@ -31,20 +32,21 @@ async function findSourceMaps(target: string): Promise<string[]> {
 }
 
 export interface LintResult {
-  errors: ValidationError[];
+  messages: ValidationMessage[];
   sourceMaps: string[];
 }
 
 export async function lint(target: string): Promise<LintResult> {
   const results: LintResult = {
-    errors: [],
+    messages: [],
     sourceMaps: [],
   };
 
   try {
     results.sourceMaps = await findSourceMaps(target);
   } catch (err) {
-    results.errors.push({
+    results.messages.push({
+      severity: SEVERITY_ERROR,
       message: `Failed to read "${target}": ${(err as Error).message}`,
     });
     return results;
@@ -54,8 +56,8 @@ export async function lint(target: string): Promise<LintResult> {
     results.sourceMaps.map(async (sourceMap) => {
       const result = await validateFile(sourceMap);
       if (result.length > 0) {
-        for (const error of result) {
-          results.errors.push(error);
+        for (const message of result) {
+          results.messages.push(message);
         }
       }
     }),
