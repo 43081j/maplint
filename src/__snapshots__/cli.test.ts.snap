@@ -1,0 +1,93 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cli > --help 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "",
+  "stdout": "Usage: maplint [options] <path>
+
+Validates the source maps found in <path>, which may be a directory to
+search or a single source map file.
+
+Options:
+      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+              validating the source maps published in its tarball
+  -h, --help  Display this message
+",
+}
+`;
+
+exports[`cli > --npm with a package 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "",
+  "stdout": "Validating source maps in valid-pkg@2.0.0
+",
+}
+`;
+
+exports[`cli > --npm with a package containing an invalid source map 1`] = `
+{
+  "exitCode": 1,
+  "stderr": "
+dist/greeter.js.map
+  error  "sources[0]" contained the path "../src/greeter.ts" which could not be found
+
+Found 1 error(s) in 1 source map(s).
+",
+  "stdout": "Validating source maps in broken-pkg@1.0.0
+",
+}
+`;
+
+exports[`cli > --npm with a package version 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "",
+  "stdout": "Validating source maps in valid-pkg@1.0.0
+",
+}
+`;
+
+exports[`cli > --npm with a package which does not exist 1`] = `"error  Failed to download "no-such-pkg" from npm:"`;
+
+exports[`cli > --npm with an invalid package spec 1`] = `
+{
+  "exitCode": 1,
+  "stderr": "error  "foo; bar" is not a valid npm package spec
+",
+  "stdout": "",
+}
+`;
+
+exports[`cli > a path to lint 1`] = `
+{
+  "exitCode": 1,
+  "stderr": "
+test/fixtures/invalid-shape/greeter.js.map
+  error  map.version: Source map version must be 3
+  error  map.sources.0: Each source must be a path or null
+  error  map.mappings: "mappings" must be a VLQ (variable length quantity) encoded string of mappings
+
+Found 3 error(s) in 1 source map(s).
+",
+  "stdout": "",
+}
+`;
+
+exports[`cli > no arguments 1`] = `
+{
+  "exitCode": 1,
+  "stderr": "Usage: maplint [options] <path>
+
+Validates the source maps found in <path>, which may be a directory to
+search or a single source map file.
+
+Options:
+      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+              validating the source maps published in its tarball
+  -h, --help  Display this message
+",
+  "stdout": "",
+}
+`;
