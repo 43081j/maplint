@@ -22,7 +22,7 @@
     "lint:format": "oxfmt --check src",
     "lint": "npm run lint:js && npm run lint:format",
     "format": "oxfmt --write src",
-    "test": "vitest run"
+    "test": "npm run build && vitest run"
   },
   "keywords": [
     "sourcemaps",
