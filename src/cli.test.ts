@@ -197,6 +197,16 @@ describe('cli', () => {
     expect(await runCLI('test/fixtures/invalid-shape')).toMatchSnapshot();
   });
 
+  test('a path to lint with valid source maps', async () => {
+    expect(
+      await runCLI('test/fixtures/valid-inline-sources'),
+    ).toMatchSnapshot();
+  });
+
+  test('a path to lint with no source maps', async () => {
+    expect(await runCLI('test/fixtures/no-source-maps')).toMatchSnapshot();
+  });
+
   test('--npm with a package', async () => {
     expect(await runCLI('--npm', 'valid-pkg')).toMatchSnapshot();
   });

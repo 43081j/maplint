@@ -1,5 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`lint > directory containing no source maps 1`] = `
+{
+  "errors": [],
+  "sourceMaps": [],
+}
+`;
+
 exports[`lint > map which does not match the source map schema 1`] = `
 {
   "errors": [
