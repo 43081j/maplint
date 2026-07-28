@@ -113,6 +113,12 @@ async function runCLI(): Promise<void> {
       `\nFound ${result.errors.length} error(s) in ${result.sourceMaps.length} source map(s).`,
     );
     process.exitCode = 1;
+  } else if (result.sourceMaps.length === 0) {
+    console.log('No source maps found.');
+  } else {
+    console.log(
+      `No errors found in ${result.sourceMaps.length} source map(s).`,
+    );
   }
 }
 

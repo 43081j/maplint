@@ -62,6 +62,10 @@ describe('lint', () => {
     ).toMatchSnapshot();
   });
 
+  test('directory containing no source maps', async () => {
+    expect(await lintFixture('no-source-maps')).toMatchSnapshot();
+  });
+
   test('path which does not exist', async () => {
     expect(await lintFixture('does-not-exist')).toMatchSnapshot();
   });

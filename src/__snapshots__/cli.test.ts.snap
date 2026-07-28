@@ -22,6 +22,7 @@ exports[`cli > --npm with a package 1`] = `
   "exitCode": 0,
   "stderr": "",
   "stdout": "Validating source maps in valid-pkg@2.0.0
+No errors found in 1 source map(s).
 ",
 }
 `;
@@ -45,6 +46,7 @@ exports[`cli > --npm with a package version 1`] = `
   "exitCode": 0,
   "stderr": "",
   "stdout": "Validating source maps in valid-pkg@1.0.0
+No errors found in 1 source map(s).
 ",
 }
 `;
@@ -72,6 +74,24 @@ test/fixtures/invalid-shape/greeter.js.map
 Found 3 error(s) in 1 source map(s).
 ",
   "stdout": "",
+}
+`;
+
+exports[`cli > a path to lint with no source maps 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "",
+  "stdout": "No source maps found.
+",
+}
+`;
+
+exports[`cli > a path to lint with valid source maps 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "",
+  "stdout": "No errors found in 1 source map(s).
+",
 }
 `;
 
