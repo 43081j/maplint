@@ -16,9 +16,10 @@ Validates the source maps found in <path>, which may be a directory to
 search or a single source map file.
 
 Options:
-      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
-              validating the source maps published in its tarball
-  -h, --help  Display this message`;
+      --npm    Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+               validating the source maps published in its tarball
+      --quiet  Only report errors, skipping any warnings
+  -h, --help   Display this message`;
 
 /**
  * Rewrites the source map paths in a result to be relative to `base`.
@@ -49,6 +50,7 @@ async function runCLI(): Promise<void> {
     options: {
       help: { type: 'boolean', short: 'h' },
       npm: { type: 'boolean' },
+      quiet: { type: 'boolean' },
     },
   });
 
@@ -83,10 +85,16 @@ async function runCLI(): Promise<void> {
     result = await lint(target, { cwd: process.cwd() });
   }
 
+  const minSeverity = values.quiet ? SEVERITY_ERROR : -1;
+
   const globalMessages: ValidationMessage[] = [];
   const messagesByFile = new Map<string, ValidationMessage[]>();
 
   for (const message of result.messages) {
+    if (message.severity < minSeverity) {
+      continue;
+    }
+
     if (message.filePath === undefined) {
       globalMessages.push(message);
       continue;

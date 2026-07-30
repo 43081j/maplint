@@ -10,9 +10,10 @@ Validates the source maps found in <path>, which may be a directory to
 search or a single source map file.
 
 Options:
-      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
-              validating the source maps published in its tarball
-  -h, --help  Display this message
+      --npm    Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+               validating the source maps published in its tarball
+      --quiet  Only report errors, skipping any warnings
+  -h, --help   Display this message
 ",
 }
 `;
@@ -62,6 +63,31 @@ exports[`cli > --npm with an invalid package spec 1`] = `
 }
 `;
 
+exports[`cli > --quiet with a path containing errors 1`] = `
+{
+  "exitCode": 1,
+  "stderr": "
+test/fixtures/invalid-shape/greeter.js.map
+  error    map.version: Source map version must be 3
+  error    map.sources.0: Each source must be a path or null
+  error    map.mappings: "mappings" must be a VLQ (variable length quantity) encoded string of mappings
+
+Found 3 error(s) in 1 source map(s).
+",
+  "stdout": "",
+}
+`;
+
+exports[`cli > --quiet with a path containing warnings 1`] = `
+{
+  "exitCode": 0,
+  "stderr": "
+Found 1 warning(s) in 1 source map(s).
+",
+  "stdout": "",
+}
+`;
+
 exports[`cli > a path to lint 1`] = `
 {
   "exitCode": 1,
@@ -104,9 +130,10 @@ Validates the source maps found in <path>, which may be a directory to
 search or a single source map file.
 
 Options:
-      --npm   Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
-              validating the source maps published in its tarball
-  -h, --help  Display this message
+      --npm    Treat <path> as an npm package spec (e.g. "foo" or "foo@3"),
+               validating the source maps published in its tarball
+      --quiet  Only report errors, skipping any warnings
+  -h, --help   Display this message
 ",
   "stdout": "",
 }
