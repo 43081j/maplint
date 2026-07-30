@@ -6,9 +6,15 @@ import type { ProjectValidator, ValidationMessage } from './types.js';
 const tsdownSourcemapPattern = /\bsourcemap\s*:\s*([^,\s}]+)/;
 const tsdownMinifyPattern = /\bminify\s*:\s*([^,\s}]+)/;
 
+const tsconfigSourceMapPattern = /"(?:inlineSourceMap|sourceMap)"\s*:\s*true/;
+
 const DEFAULT_WARNING =
   'Source maps are enabled but minification is not, so the output should ' +
   'already be readable without them. Consider disabling source maps';
+
+const TSCONFIG_WARNING =
+  'Source maps are enabled but TypeScript does not minify its output, so it ' +
+  'should already be readable without them. Consider disabling source maps';
 
 type ConfigMatcher = (cwd: string) => Promise<ValidationMessage[]>;
 
@@ -45,7 +51,30 @@ const tsdownMatcher: ConfigMatcher = async (cwd) => {
   ];
 };
 
-const matchers: ConfigMatcher[] = [tsdownMatcher];
+const tsconfigMatcher: ConfigMatcher = async (cwd) => {
+  const configPath = path.join(cwd, 'tsconfig.json');
+  let contents: string;
+
+  try {
+    contents = await readFile(configPath, 'utf8');
+  } catch {
+    return [];
+  }
+
+  if (!tsconfigSourceMapPattern.test(contents)) {
+    return [];
+  }
+
+  return [
+    {
+      filePath: configPath,
+      severity: SEVERITY_WARN,
+      message: TSCONFIG_WARNING,
+    },
+  ];
+};
+
+const matchers: ConfigMatcher[] = [tsdownMatcher, tsconfigMatcher];
 
 /**
  * Validates that source maps are worth producing at all: unminified output is
