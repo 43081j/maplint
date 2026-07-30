@@ -96,4 +96,20 @@ describe('lint', () => {
       await lintProjectFixture('tsdown-source-maps-disabled'),
     ).toMatchSnapshot();
   });
+
+  test('project with source maps enabled in tsconfig', async () => {
+    expect(await lintProjectFixture('tsconfig-source-maps')).toMatchSnapshot();
+  });
+
+  test('project with inline source maps enabled in tsconfig', async () => {
+    expect(
+      await lintProjectFixture('tsconfig-inline-source-maps'),
+    ).toMatchSnapshot();
+  });
+
+  test('project with source maps disabled in tsconfig', async () => {
+    expect(
+      await lintProjectFixture('tsconfig-source-maps-disabled'),
+    ).toMatchSnapshot();
+  });
 });

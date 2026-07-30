@@ -134,6 +134,21 @@ exports[`lint > path which does not exist 1`] = `
 }
 `;
 
+exports[`lint > project with inline source maps enabled in tsconfig 1`] = `
+{
+  "messages": [
+    {
+      "filePath": "test/fixtures/tsconfig-inline-source-maps/tsconfig.json",
+      "message": "Source maps are enabled but TypeScript does not minify its output, so it should already be readable without them. Consider disabling source maps",
+      "severity": 1,
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/tsconfig-inline-source-maps/dist/greeter.js.map",
+  ],
+}
+`;
+
 exports[`lint > project with no build config 1`] = `
 {
   "messages": [],
@@ -172,6 +187,30 @@ exports[`lint > project with source maps disabled 1`] = `
   "messages": [],
   "sourceMaps": [
     "test/fixtures/tsdown-source-maps-disabled/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > project with source maps disabled in tsconfig 1`] = `
+{
+  "messages": [],
+  "sourceMaps": [
+    "test/fixtures/tsconfig-source-maps-disabled/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > project with source maps enabled in tsconfig 1`] = `
+{
+  "messages": [
+    {
+      "filePath": "test/fixtures/tsconfig-source-maps/tsconfig.json",
+      "message": "Source maps are enabled but TypeScript does not minify its output, so it should already be readable without them. Consider disabling source maps",
+      "severity": 1,
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/tsconfig-source-maps/dist/greeter.js.map",
   ],
 }
 `;
