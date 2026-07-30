@@ -71,3 +71,11 @@ export interface ValidationMessage {
 export type Validator = (
   file: SourceMapFile,
 ) => ValidationMessage[] | Promise<ValidationMessage[]>;
+
+/**
+ * Validates the project which produced the source maps, rather than any
+ * individual source map.
+ */
+export type ProjectValidator = (
+  cwd: string,
+) => ValidationMessage[] | Promise<ValidationMessage[]>;

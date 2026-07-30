@@ -134,6 +134,48 @@ exports[`lint > path which does not exist 1`] = `
 }
 `;
 
+exports[`lint > project with no build config 1`] = `
+{
+  "messages": [],
+  "sourceMaps": [
+    "test/fixtures/valid-inline-sources/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > project with source maps and minification 1`] = `
+{
+  "messages": [],
+  "sourceMaps": [
+    "test/fixtures/tsdown-minified/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > project with source maps but no minification 1`] = `
+{
+  "messages": [
+    {
+      "filePath": "test/fixtures/tsdown-unnecessary-source-maps/tsdown.config.ts",
+      "message": "Source maps are enabled but minification is not, so the output should already be readable without them. Consider disabling source maps",
+      "severity": 1,
+    },
+  ],
+  "sourceMaps": [
+    "test/fixtures/tsdown-unnecessary-source-maps/dist/greeter.js.map",
+  ],
+}
+`;
+
+exports[`lint > project with source maps disabled 1`] = `
+{
+  "messages": [],
+  "sourceMaps": [
+    "test/fixtures/tsdown-source-maps-disabled/dist/greeter.js.map",
+  ],
+}
+`;
+
 exports[`lint > single source map file 1`] = `
 {
   "messages": [],
