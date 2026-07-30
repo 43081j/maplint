@@ -207,6 +207,18 @@ describe('cli', () => {
     expect(await runCLI('test/fixtures/no-source-maps')).toMatchSnapshot();
   });
 
+  test('--quiet with a path containing warnings', async () => {
+    expect(
+      await runCLI('--quiet', 'test/fixtures/unresolved-source'),
+    ).toMatchSnapshot();
+  });
+
+  test('--quiet with a path containing errors', async () => {
+    expect(
+      await runCLI('--quiet', 'test/fixtures/invalid-shape'),
+    ).toMatchSnapshot();
+  });
+
   test('--npm with a package', async () => {
     expect(await runCLI('--npm', 'valid-pkg')).toMatchSnapshot();
   });

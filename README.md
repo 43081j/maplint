@@ -31,6 +31,7 @@ npx maplint --npm some-package@3
 | Option         | Description                                                                                               |
 | -------------- | --------------------------------------------------------------------------------------------------------- |
 | `--npm`        | Treat the path as an npm package spec (e.g. `foo` or `foo@3`) and validate the source maps in its tarball |
+| `--quiet`      | Only report errors, skipping any warnings                                                                 |
 | `-h`, `--help` | Display usage information                                                                                 |
 
 ## License
