@@ -80,7 +80,7 @@ async function runCLI(): Promise<void> {
       await rm(dest, { force: true, recursive: true });
     }
   } else {
-    result = await lint(target);
+    result = await lint(target, { cwd: process.cwd() });
   }
 
   const globalMessages: ValidationMessage[] = [];

@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import { SEVERITY_ERROR } from './validation/types.js';
 import type { ValidationMessage } from './validation/types.js';
 import { validateFile } from './validation/validate-file.js';
+import { validateProject } from './validation/validate-project.js';
 
 const DEFAULT_IGNORES = new Set(['node_modules']);
 
@@ -36,11 +37,26 @@ export interface LintResult {
   sourceMaps: string[];
 }
 
-export async function lint(target: string): Promise<LintResult> {
+export interface LintOptions {
+  /**
+   * Directory of the project which produced the source maps. Its build
+   * configuration is validated too, which is skipped if this is unset.
+   */
+  cwd?: string;
+}
+
+export async function lint(
+  target: string,
+  options: LintOptions = {},
+): Promise<LintResult> {
   const results: LintResult = {
     messages: [],
     sourceMaps: [],
   };
+
+  if (options.cwd !== undefined) {
+    results.messages.push(...(await validateProject(options.cwd)));
+  }
 
   try {
     results.sourceMaps = await findSourceMaps(target);

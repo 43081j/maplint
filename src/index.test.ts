@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { lint } from './index.js';
-import type { LintResult } from './index.js';
+import type { LintOptions, LintResult } from './index.js';
 
 const fixturesDir = path.relative(
   process.cwd(),
@@ -12,8 +12,11 @@ const fixturesDir = path.relative(
  * Lints a fixture, sorting the result so it can be snapshotted regardless of
  * the order in which the source maps happened to be validated.
  */
-async function lintFixture(name: string): Promise<LintResult> {
-  const result = await lint(path.join(fixturesDir, name));
+async function lintFixture(
+  name: string,
+  options?: LintOptions,
+): Promise<LintResult> {
+  const result = await lint(path.join(fixturesDir, name), options);
 
   return {
     sourceMaps: [...result.sourceMaps].sort(),
@@ -21,6 +24,10 @@ async function lintFixture(name: string): Promise<LintResult> {
       `${a.filePath}${a.message}`.localeCompare(`${b.filePath}${b.message}`),
     ),
   };
+}
+
+function lintProjectFixture(name: string): Promise<LintResult> {
+  return lintFixture(name, { cwd: path.join(fixturesDir, name) });
 }
 
 describe('lint', () => {
@@ -68,5 +75,25 @@ describe('lint', () => {
 
   test('path which does not exist', async () => {
     expect(await lintFixture('does-not-exist')).toMatchSnapshot();
+  });
+
+  test('project with no build config', async () => {
+    expect(await lintProjectFixture('valid-inline-sources')).toMatchSnapshot();
+  });
+
+  test('project with source maps but no minification', async () => {
+    expect(
+      await lintProjectFixture('tsdown-unnecessary-source-maps'),
+    ).toMatchSnapshot();
+  });
+
+  test('project with source maps and minification', async () => {
+    expect(await lintProjectFixture('tsdown-minified')).toMatchSnapshot();
+  });
+
+  test('project with source maps disabled', async () => {
+    expect(
+      await lintProjectFixture('tsdown-source-maps-disabled'),
+    ).toMatchSnapshot();
   });
 });
