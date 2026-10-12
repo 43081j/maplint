@@ -24,13 +24,13 @@ describe('public validators', () => {
   const file: SourceMapFile = { path: 'in-memory.js.map', map };
   const validators: Validator[] = [mappingsValidator, ignoreListValidator];
 
-  test('validates an in-memory map with selected pure validators', async () => {
+  test('valid map', async () => {
     expect(
       await Promise.all(validators.map((validate) => validate(file))),
     ).toEqual([[], []]);
   });
 
-  test('returns diagnostics for an in-memory map', async () => {
+  test('invalid source references', async () => {
     const invalidFile: SourceMapFile = {
       ...file,
       map: { ...map, sources: [] },
@@ -55,13 +55,16 @@ describe('public validators', () => {
     ]);
   });
 
-  test('exports the source files validator and warning severity', async () => {
+  test('map with inline sources', async () => {
     expect(
       await sourceFilesValidator({
         ...file,
         map: { ...map, sourcesContent: ['export {};'] },
       }),
     ).toEqual([]);
+  });
+
+  test('severity constants', () => {
     expect(SEVERITY_WARN).toBe(1);
     expect(SEVERITY_ERROR).toBe(2);
   });
