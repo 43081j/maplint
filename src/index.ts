@@ -5,6 +5,18 @@ import type { ValidationMessage } from './validation/types.js';
 import { validateFile } from './validation/validate-file.js';
 import { validateProject } from './validation/validate-project.js';
 
+export { ignoreListValidator } from './validation/ignore-list.js';
+export { mappingsValidator } from './validation/mappings.js';
+export { sourceFilesValidator } from './validation/source-files.js';
+export { SEVERITY_ERROR, SEVERITY_WARN } from './validation/types.js';
+export type {
+  Severity,
+  SourceMap,
+  SourceMapFile,
+  ValidationMessage,
+  Validator,
+} from './validation/types.js';
+
 const DEFAULT_IGNORES = new Set(['node_modules']);
 
 const isIgnored = (name: string): boolean => DEFAULT_IGNORES.has(name);

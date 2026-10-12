@@ -26,6 +26,38 @@ npx maplint --npm some-package
 npx maplint --npm some-package@3
 ```
 
+## Programmatic usage
+
+Run selected validators on an already parsed, schema-valid source map:
+
+```ts
+import {
+  ignoreListValidator,
+  mappingsValidator,
+  SEVERITY_ERROR,
+} from 'maplint';
+import type { SourceMapFile, Validator } from 'maplint';
+
+const file: SourceMapFile = {
+  path: 'dist/app.js.map',
+  map: { version: 3, sources: ['app.ts'], mappings: 'AAAA', ignoreList: [0] },
+};
+const validators: Validator[] = [mappingsValidator, ignoreListValidator];
+const messages = (
+  await Promise.all(validators.map((validate) => validate(file)))
+).flat();
+const errors = messages.filter(
+  (message) => message.severity === SEVERITY_ERROR,
+);
+```
+
+Validators expect schema-valid input and do not replace schema validation.
+`mappingsValidator` and `ignoreListValidator` are pure and do not read files or
+discover maps; `path` identifies the map in diagnostic messages. The also-exported
+`sourceFilesValidator` performs filesystem checks for local sources without
+inline `sourcesContent`, resolving relative paths from the map's `path` and
+`sourceRoot`. Results use `SEVERITY_ERROR` or `SEVERITY_WARN`.
+
 ## Options
 
 | Option         | Description                                                                                               |
