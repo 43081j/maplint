@@ -39,7 +39,16 @@ export const SourceMapSchema = v.object(
   'Source map must be an object',
 );
 
-export type SourceMap = v.InferOutput<typeof SourceMapSchema>;
+export interface SourceMap {
+  version: 3;
+  file?: string;
+  sourceRoot?: string;
+  sources: (string | null)[];
+  sourcesContent?: (string | null)[];
+  names?: string[];
+  mappings: string;
+  ignoreList?: number[];
+}
 
 /**
  * A parsed source map, alongside the path it was loaded from.
@@ -49,7 +58,10 @@ export const SourceMapFileSchema = v.object({
   map: SourceMapSchema,
 });
 
-export type SourceMapFile = v.InferOutput<typeof SourceMapFileSchema>;
+export interface SourceMapFile {
+  path: string;
+  map: SourceMap;
+}
 
 export const SEVERITY_WARN = 1;
 export const SEVERITY_ERROR = 2;
