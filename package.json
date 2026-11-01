@@ -57,6 +57,6 @@
   },
   "dependencies": {
     "@jridgewell/sourcemap-codec": "^1.6.0",
-    "modern-tar": "^0.8.4"
+    "modern-tar": "^0.8.6"
   }
 }
